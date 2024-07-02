@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.dasboard.entity.OverTime;
 import com.example.dasboard.service.OverTimeService;
 
 @RestController
 @RequestMapping("/api/dash")
 public class OverTimeController {
+	
 	@Autowired
 	OverTimeService overTimeService;
 	
@@ -24,16 +24,30 @@ public class OverTimeController {
 	
 	public Optional<OverTime> getId(@PathVariable int id){
 		return overTimeService.getId(id);
+		
 	}
 	@GetMapping("/getAll")
 	
 	public List<OverTime> getDetails(){
 		return overTimeService.getDetails();
+		
 	}
 	@GetMapping("/overTime")
 	
-	public double totalOverTime(@RequestParam String fromDate,@RequestParam String toData){
-		return overTimeService.totalOverTime(fromDate,toData);
+	public ResponseEntity<?> totalOverTime(@RequestParam String fromDate,@RequestParam String toDate){
+		 return overTimeService.totalOverTime(fromDate,toDate);
+		 
+	}
+	@GetMapping("/getUserName")
+	
+	public ResponseEntity<?> userName(@RequestParam String fromDate,@RequestParam String toDate){
+		return overTimeService.userName(fromDate,toDate);
+		
+	}
+   @GetMapping("/getCost")
+	
+	public ResponseEntity<?> totalCost(@RequestParam String fromDate,@RequestParam String toDate){
+		return overTimeService.totalCost(fromDate,toDate);
 	}
 
 }
