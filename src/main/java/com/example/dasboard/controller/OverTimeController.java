@@ -48,6 +48,26 @@ public class OverTimeController {
 	
 	public ResponseEntity<?> totalCost(@RequestParam String fromDate,@RequestParam String toDate){
 		return overTimeService.totalCost(fromDate,toDate);
+		
 	}
+   @GetMapping("/percentage")
+   
+   public ResponseEntity<?> getPercentage(@RequestParam String fromDate,@RequestParam String toDate){
+		return overTimeService.getPercentage(fromDate,toDate);
 
+}
+   //four value get a one API
+   @GetMapping("/getAllData")
+   
+   public ResponseEntity<?> getDashBoard(@RequestParam String fromDate,@RequestParam String toDate){
+	   return overTimeService.getDashBoard(fromDate,toDate);
+	   
+   }  
+//   @GetMapping("/name")
+//   
+//   public ResponseEntity<?> allOverTime(@RequestParam String fromDate,@RequestParam String toDate){
+//	    return overTimeService.allOverTime(fromDate,toDate);
+//   
+//   }  
+//   
 }

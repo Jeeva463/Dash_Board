@@ -1,4 +1,5 @@
 package com.example.dasboard.service;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import com.example.dasboard.entity.OverTime;
 import com.example.dasboard.repository.OverTimeRepository;
 @Service
 public class OverTimeService {
+	
 	@Autowired
 	OverTimeRepository overTimeRepository;
 
@@ -18,35 +20,73 @@ public class OverTimeService {
 	     return overTimeRepository.findById(id);
 		
 	}
-
 	public List<OverTime> getDetails() {
 		return overTimeRepository.findAll();
 		
 	}
-
 	public ResponseEntity<?> totalOverTime(String fromDate, String toDate) {
 		Dto obj = new Dto();
 		if (fromDate != null && toDate != null) {
 			Double overtimehowers = overTimeRepository.findTotalovertime(fromDate, toDate);	
-			obj.setData("OverTimeHours"+"="+overtimehowers);
+			obj.setData("OverTimeHours "+"="+" "+overtimehowers);
 		}
-			return ResponseEntity.ok(obj);	
+			return ResponseEntity.ok(obj);
+			
 	}
 	public ResponseEntity<?> userName(String fromDate, String toDate) {
 		Dto obj = new Dto();
 		if (fromDate != null && toDate != null) {
 		Integer count = overTimeRepository.findUserName(fromDate, toDate);
-		obj.setData("EmployeesWithOvertime"+"="+count);
+		obj.setData("EmployeesWithOvertime "+"="+" "+count);
 	}
 		return ResponseEntity.ok(obj);
+		
 }
 	public ResponseEntity<?> totalCost(String fromDate, String toDate) {
 		Dto obj = new Dto();
 		if (fromDate != null && toDate != null) {
 		Double total = overTimeRepository.findTotalCost(fromDate, toDate);
-		obj.setData("TotalCostIncuried"+"="+"$"+total);
+		obj.setData("TotalCostIncuried "+"="+"$"+" "+total);
 	}
 		return ResponseEntity.ok(obj);
-}	
+		
+}
+	public ResponseEntity<?> getPercentage(String fromDate, String toDate) {
+		Dto obj = new Dto();
+		if(fromDate != null || toDate != null) {
+			Double totalTime = overTimeRepository.findTotalovertime(fromDate, toDate);
+			Double estimateTime = overTimeRepository.findEstimatedHours(fromDate, toDate);
+			Double overallPercentage = (totalTime/estimateTime)*100;
+			obj.setData("OverTimeHoursPercentage "+"="+" "+overallPercentage+"%");
+		}
+		return ResponseEntity.ok(obj);
+		
+	}
+	public ResponseEntity<?> getDashBoard(String fromDate, String toDate) {
+		Dto obj = new Dto();
+		if(fromDate != null || toDate != null) {
+			Double overtimehowers = overTimeRepository.findTotalovertime(fromDate, toDate);
+			Integer count = overTimeRepository.findUserName(fromDate, toDate);
+			Double total = overTimeRepository.findTotalCost(fromDate, toDate);
+			Double estimateTime = overTimeRepository.findEstimatedHours(fromDate, toDate);
+			Double overallPercentage = (overtimehowers/estimateTime)*100;
+			HashMap<String, Object>map = new HashMap<String, Object>();
+			map.put("OverTimeHours",overtimehowers);
+			map.put("EmployeesWithOvertime",count);
+			map.put("TotalCostIncuried",total);
+			map.put("OverTimeHoursPercentage",overallPercentage);
+			obj.setData(map);
+		}
+		return ResponseEntity.ok(obj);
+		
+	}
+//	public ResponseEntity<?>  allOverTime(String fromDate, String toDate) {
+//		Dto obj = new Dto();
+//		if(fromDate != null || toDate != null) {
+//		String projectName = overTimeRepository.findProjectName(fromDate, toDate);
+//		obj.setData(projectName);
+//		}
+//		return ResponseEntity.ok(obj);
+//	}	
 }	
 	
