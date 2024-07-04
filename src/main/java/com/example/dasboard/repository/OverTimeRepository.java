@@ -1,8 +1,9 @@
 package com.example.dasboard.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -34,6 +35,16 @@ public interface OverTimeRepository extends JpaRepository<OverTime, Integer> {
 //    Double dayOfWeek(@RequestParam String fromDate,@RequestParam String toDate);
     
 //    //SELECT  DISTINCT oa.project_name FROM overtime_analysis oa WHERE oa.attendance_date BETWEEN '01/04/2024' AND '01/05/2024';
-//    @Query(value = "SELECT  DISTINCT oa.project_name FROM overtime_analysis oa WHERE To_DATE(oa.attendance_date,'dd/MM/yyy') BETWEEN To_DATE(:fromDate,'dd/MM/yyyy') AND To_DATE(:toDate,'dd/MM/yyyy')",nativeQuery = true)
-//    String findProjectName(@RequestParam String fromDate,@RequestParam String toDate);
+    @Query(value = "SELECT  DISTINCT oa.project_name FROM overtime_analysis oa WHERE To_DATE(oa.attendance_date,'dd/MM/yyy') BETWEEN To_DATE(:fromDate,'dd/MM/yyyy') AND To_DATE(:toDate,'dd/MM/yyyy')",nativeQuery = true)
+    List<String> findProjectName(@RequestParam String fromDate,@RequestParam String toDate);
+    
+//    //SELECT oa.overtime_hours FROM overtime_analysis oa WHERE oa.overtime_hours>0 and oa.attendance_date BETWEEN '01/04/2024' AND '01/05/2024';
+//    @Query(value = "SELECT oa.overtime_hours FROM overtime_analysis oa WHERE oa.overtime_hours>0 and To_DATE(oa.attendance_date,'dd/MM/yyy') BETWEEN To_DATE(:fromDate,'dd/MM/yyyy') AND To_DATE(:toDate,'dd/MM/yyyy')",nativeQuery = true)
+//     List<Double> findTotalOverTime (@RequestParam String fromDate,@RequestParam String toDate);
+    
+    //SELECT sum(oa.overtime_hours) FROM overtime_analysis oa WHERE oa.project_name = "Admin 2024"  AND oa.day = "WorkingDay" AND oa.overtime_hours > 0 AND oa.attendance_date BETWEEN '01/04/2024' AND '01/05/2024';
+    @Query(value = "SELECT sum(oa.overtime_hours) FROM overtime_analysis oa WHERE oa.project_name =: AND oa.day = : AND oa.overtime_hours > 0 AND To_DATE(oa.attendance_date,'dd/MM/yyyy') BETWEEN To_DATE(:fromDate,'dd/MM/yyyy') AND To_DATE(:toDate,'dd/MM/yyyy')",nativeQuery = true)
+     List<Double> findWorkingDay (@RequestParam String fromDate,@RequestParam String toDate);
+
+
 }

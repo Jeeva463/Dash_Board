@@ -80,13 +80,18 @@ public class OverTimeService {
 		return ResponseEntity.ok(obj);
 		
 	}
-//	public ResponseEntity<?>  allOverTime(String fromDate, String toDate) {
-//		Dto obj = new Dto();
-//		if(fromDate != null || toDate != null) {
-//		String projectName = overTimeRepository.findProjectName(fromDate, toDate);
-//		obj.setData(projectName);
-//		}
-//		return ResponseEntity.ok(obj);
-//	}	
+	public ResponseEntity<?>  allOverTime(String fromDate, String toDate) {
+		Dto obj = new Dto();
+		if(fromDate != null || toDate != null) {
+	   HashMap<String, Object>map = new HashMap<String, Object>();	
+		List<String> projectName = overTimeRepository.findProjectName(fromDate, toDate);
+		List<Double>totalOverTime = overTimeRepository.findWorkingDay(fromDate, toDate);
+		
+		map.put("projectName", projectName);
+		map.put("totalOverTime", totalOverTime);
+		obj.setData(map);
+		}
+		return ResponseEntity.ok(obj);
+	}	
 }	
 	
