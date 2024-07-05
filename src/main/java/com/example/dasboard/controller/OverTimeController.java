@@ -63,11 +63,23 @@ public class OverTimeController {
 	   return overTimeService.getDashBoard(fromDate,toDate);
 	   
    }  
-   @GetMapping("/name")
+   @GetMapping("/projectName")
    
-   public ResponseEntity<?> allOverTime(@RequestParam String fromDate,@RequestParam String toDate){
-	    return overTimeService.allOverTime(fromDate,toDate);
+   public ResponseEntity<?> projectNameOverTime(@RequestParam String fromDate,@RequestParam String toDate){
+	    return overTimeService.projectNameOverTime(fromDate,toDate);
+ 
+   } 
+   @GetMapping("/phaseName")
    
-   }  
+   public ResponseEntity<?> phaseNameOverTime(@RequestParam String fromDate,@RequestParam String toDate){
+	     return overTimeService.phaseNameOverTime(fromDate,toDate);
+
+   }
+  @GetMapping("/jobName")
+   
+   public ResponseEntity<?> jobNameOverTime(@RequestParam String fromDate,@RequestParam String toDate){
+	     return overTimeService.jobNameOverTime(fromDate,toDate);
+
+   }
    
 }

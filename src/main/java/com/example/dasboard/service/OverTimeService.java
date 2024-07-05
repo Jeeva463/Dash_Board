@@ -1,4 +1,5 @@
 package com.example.dasboard.service;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -80,18 +81,102 @@ public class OverTimeService {
 		return ResponseEntity.ok(obj);
 		
 	}
-	public ResponseEntity<?>  allOverTime(String fromDate, String toDate) {
+	public ResponseEntity<?>  projectNameOverTime(String fromDate, String toDate) {
 		Dto obj = new Dto();
-		if(fromDate != null || toDate != null) {
-	   HashMap<String, Object>map = new HashMap<String, Object>();	
-		List<String> projectName = overTimeRepository.findProjectName(fromDate, toDate);
-		List<Double>totalOverTime = overTimeRepository.findWorkingDay(fromDate, toDate);
-		
-		map.put("projectName", projectName);
-		map.put("totalOverTime", totalOverTime);
+		 HashMap<String, Object>map = new HashMap<String, Object>();	
+		if(fromDate != null&&toDate != null) {
+		List<String> projectNam = overTimeRepository.findProjectName(fromDate, toDate);
+		List<Double> workDaylist = new ArrayList<Double>();
+		List<Double> weekOflist = new ArrayList<Double>();
+		List<Double> holidaylist = new ArrayList<Double>();
+		for(int i=0;i<projectNam.size();i++) {
+			Double overAll = overTimeRepository.findProjectNameOverTime(projectNam.get(i), fromDate, toDate);
+			Double workDay = overTimeRepository.findDayOverTime(projectNam.get(i),fromDate, toDate,"Working Day");
+			Double weekOf = overTimeRepository.findDayOverTime(projectNam.get(i),fromDate, toDate, "Weekoff");
+			Double holiday = overTimeRepository.findDayOverTime(projectNam.get(i), fromDate, toDate,"Public Holiday");
+
+			Double workDay1 = Calucate(workDay,overAll);
+			Double weekOf1 = Calucate(weekOf,overAll);
+			Double holiday1 = Calucate(holiday,overAll);
+			
+			workDaylist.add(workDay1);
+			weekOflist.add(weekOf1);
+			holidaylist.add(holiday1);		
+		}		
+		map.put("projectName", projectNam);
+		map.put("workDaylist", workDaylist);
+		map.put("weekOflist", weekOflist);
+		map.put("holidaylist", holidaylist);
 		obj.setData(map);
 		}
 		return ResponseEntity.ok(obj);
-	}	
+	}
+	public static Double Calucate(Double hour,Double overAll) {
+		if(hour == null || hour == 0) {
+			return 0.0;
+		}
+		Double result = (hour/overAll)*100;
+		return result;		
+	}
+	public ResponseEntity<?>  phaseNameOverTime(String fromDate, String toDate) {
+		Dto obj = new Dto();
+		 HashMap<String, Object>map = new HashMap<String, Object>();	
+		if(fromDate != null&&toDate != null) {
+		List<String> phaseNam = overTimeRepository.findPhaseName(fromDate, toDate);
+		List<Double> workDaylist = new ArrayList<Double>();
+		List<Double> weekOflist = new ArrayList<Double>();
+		List<Double> holidaylist = new ArrayList<Double>();
+		for(int i=0;i<phaseNam.size();i++) {
+			Double overAll = overTimeRepository.findPhaseNameOverTime(phaseNam.get(i), fromDate, toDate);
+			Double workDay = overTimeRepository.findDayOverTime(phaseNam.get(i),fromDate, toDate,"Working Day");
+			Double weekOf = overTimeRepository.findDayOverTime(phaseNam.get(i),fromDate, toDate, "Weekoff");
+			Double holiday = overTimeRepository.findDayOverTime(phaseNam.get(i), fromDate, toDate,"Public Holiday");
+
+			Double workDay1 = Calucate(workDay,overAll);
+			Double weekOf1 = Calucate(weekOf,overAll);
+			Double holiday1 = Calucate(holiday,overAll);
+			
+			workDaylist.add(workDay1);
+			weekOflist.add(weekOf1);
+			holidaylist.add(holiday1);		
+		}		
+		map.put("projectName", phaseNam);
+		map.put("workDaylist", workDaylist);
+		map.put("weekOflist", weekOflist);
+		map.put("holidaylist", holidaylist);
+		obj.setData(map);
+		}
+		return ResponseEntity.ok(obj);
+	}
+	public ResponseEntity<?>  jobNameOverTime(String fromDate, String toDate) {
+		Dto obj = new Dto();
+		 HashMap<String, Object>map = new HashMap<String, Object>();	
+		if(fromDate != null&&toDate != null) {
+		List<String> jobnam = overTimeRepository.findJobName(fromDate, toDate);
+		List<Double> workDaylist = new ArrayList<Double>();
+		List<Double> weekOflist = new ArrayList<Double>();
+		List<Double> holidaylist = new ArrayList<Double>();
+		for(int i=0;i<jobnam.size();i++) {
+			Double overAll = overTimeRepository.findJobNameOverTime(jobnam.get(i), fromDate, toDate);
+			Double workDay = overTimeRepository.findDayOverTime(jobnam.get(i),fromDate, toDate,"Working Day");
+			Double weekOf = overTimeRepository.findDayOverTime(jobnam.get(i),fromDate, toDate, "Weekoff");
+			Double holiday = overTimeRepository.findDayOverTime(jobnam.get(i), fromDate, toDate,"Public Holiday");
+
+			Double workDay1 = Calucate(workDay,overAll);
+			Double weekOf1 = Calucate(weekOf,overAll);
+			Double holiday1 = Calucate(holiday,overAll);
+			
+			workDaylist.add(workDay1);
+			weekOflist.add(weekOf1);
+			holidaylist.add(holiday1);		
+		}		
+		map.put("projectName", jobnam);
+		map.put("workDaylist", workDaylist);
+		map.put("weekOflist", weekOflist);
+		map.put("holidaylist", holidaylist);
+		obj.setData(map);
+		}
+		return ResponseEntity.ok(obj);
+	}
 }	
 	
