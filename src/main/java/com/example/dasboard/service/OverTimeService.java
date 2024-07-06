@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.dasboard.dto.Dto;
+import com.example.dasboard.dto.FilterDto;
 import com.example.dasboard.entity.OverTime;
 import com.example.dasboard.repository.OverTimeRepository;
 @Service
@@ -140,7 +141,7 @@ public class OverTimeService {
 			weekOflist.add(weekOf1);
 			holidaylist.add(holiday1);		
 		}		
-		map.put("projectName", phaseNam);
+		map.put("phaseName", phaseNam);
 		map.put("workDaylist", workDaylist);
 		map.put("weekOflist", weekOflist);
 		map.put("holidaylist", holidaylist);
@@ -170,13 +171,47 @@ public class OverTimeService {
 			weekOflist.add(weekOf1);
 			holidaylist.add(holiday1);		
 		}		
-		map.put("projectName", jobnam);
+		map.put("jobname", jobnam);
 		map.put("workDaylist", workDaylist);
 		map.put("weekOflist", weekOflist);
 		map.put("holidaylist", holidaylist);
 		obj.setData(map);
 		}
 		return ResponseEntity.ok(obj);
+	}
+	public ResponseEntity<?>  userNameOverTime(String fromDate, String toDate) {
+		Dto obj = new Dto();
+		 HashMap<String, Object>map = new HashMap<String, Object>();	
+		if(fromDate != null&&toDate != null) {
+		List<String> usernam = overTimeRepository.findUserName1(fromDate, toDate);
+		List<Double> workDaylist = new ArrayList<Double>();
+		List<Double> weekOflist = new ArrayList<Double>();
+		List<Double> holidaylist = new ArrayList<Double>();
+		for(int i=0;i<usernam.size();i++) {
+			Double overAll = overTimeRepository.findUserNameOverTime(usernam.get(i), fromDate, toDate);
+			Double workDay = overTimeRepository.findDayOverTime(usernam.get(i),fromDate, toDate,"Working Day");
+			Double weekOf = overTimeRepository.findDayOverTime(usernam.get(i),fromDate, toDate, "Weekoff");
+			Double holiday = overTimeRepository.findDayOverTime(usernam.get(i), fromDate, toDate,"Public Holiday");
+
+			Double workDay1 = Calucate(workDay,overAll);
+			Double weekOf1 = Calucate(weekOf,overAll);
+			Double holiday1 = Calucate(holiday,overAll);
+			
+			workDaylist.add(workDay1);
+			weekOflist.add(weekOf1);
+			holidaylist.add(holiday1);		
+		}		
+		map.put("username", usernam);
+		map.put("workDaylist", workDaylist);
+		map.put("weekOflist", weekOflist);
+		map.put("holidaylist", holidaylist);
+		obj.setData(map);
+		}
+		return ResponseEntity.ok(obj);
+	}
+	public ResponseEntity<?> fildFilter(FilterDto filterDto) {
+		
+		
 	}
 }	
 	

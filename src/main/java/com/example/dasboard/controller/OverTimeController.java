@@ -7,9 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.dasboard.dto.FilterDto;
 import com.example.dasboard.entity.OverTime;
 import com.example.dasboard.service.OverTimeService;
 
@@ -81,5 +85,15 @@ public class OverTimeController {
 	     return overTimeService.jobNameOverTime(fromDate,toDate);
 
    }
+  @GetMapping("/userName")
+  
+  public ResponseEntity<?> userNameOverTime(@RequestParam String fromDate,@RequestParam String toDate){
+	     return overTimeService.userNameOverTime(fromDate,toDate);
+
+  }
+  @PostMapping("/filter")
+  public ResponseEntity<?> fildFilter(@RequestBody FilterDto filterDto){
+	  overTimeService.fildFilter(filterDto);
+  }
    
 }
